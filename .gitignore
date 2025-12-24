@@ -1,0 +1,35 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Training outputs and logs
+mnist-cnn-experiments/outputs/
+*.pth
+*.pt
+*.tfevents.*
+runs/
+
+# Data/artifacts
+data/
+datasets/
+*.mp4
