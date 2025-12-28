@@ -1,4 +1,4 @@
-﻿# 从备考策略到代码实战：手写数字识别的神经网络全解
+# 从备考策略到代码实战：手写数字识别的神经网络全解
 
 
 > 本文以备考策略为独特视角，用五步学习法拆解机器学习全流程。通过手写数字识别任务，深入剖析数据预处理、全连接网络构建、梯度下降优化的数学原理，结合PyTorch代码逐行实现MNIST识别模型（测试准确率达97.38%）。文中独创性提出备考错题本与反向传播的对应关系，用可视化结果展现神经网络从像素荒漠中解码数字特征的思维轨迹，为初学者打通理论推导与工程实践的认知闭环。
@@ -102,7 +102,7 @@ test_dataset = datasets.MNIST(
 经过前文的探讨，我们终于要揭开神经网络的核心机制。让我们从一个具体的数据案例入手：
 
 假设存在如图所示的序列数据（注：实际数据点远多于图中5个示意点，整体呈现多段近似线性的分布特征）：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/de2ca7bc7b1f489f8834f2e151b2fcc8.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/de2ca7bc7b1f489f8834f2e151b2fcc8.png)
 
 
 面对这种多段线性分布的数据，传统的单一线性回归模型显然力不从心。但有趣的是，每个区段本身都保持着良好的线性特征，这个矛盾该如何破解？
@@ -118,7 +118,7 @@ $$y_i(x)=\begin{cases}0&x<x_i\\b_i+w_i(x-x_i)&x_i\leq x\leq x_{i+1}\\b_i+w_i(x_{
 > （注：这里的$b_i$与原始模型中的截距存在差异，但模型会自动学习参数间的关联关系）
 
 可视化效果如图所示：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/b05cbe5bd0d44591ad6999db3dc8c17b.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/b05cbe5bd0d44591ad6999db3dc8c17b.png)
 
 
 此时整体预测函数可以表示为这些基函数的线性叠加。但各段表达式仍存在形式不统一的问题，这暗示着我们需要更本质的数学表达来整合这些分段特征。
@@ -141,7 +141,7 @@ $$
 \sigma(x) = \frac{1}{1+e^{-x}}
 $$
 其全域可导的特性与S型曲线（如图）完美契合分段线性趋势：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/d730d42c4ad34214843afda68f58cc14.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/d730d42c4ad34214843afda68f58cc14.png)
 
 
 但要让Sigmoid真正替代Hard Sigmoid，需要赋予其三个核心调控能力：
@@ -180,7 +180,7 @@ $$
 至此，我们完成了从分段线性模型到神经网络架构的自然过渡。这个推导过程揭示了神经网络本质上是多个可调Sigmoid基函数的线性组合，每个神经元对应一个特征空间中的非线性划分单元。
 
 让我们通过结构图解析神经网络的运算本质。参考流程示意图：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/90dc1fbe58d4462eb8c7fc0c75c21d91.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/90dc1fbe58d4462eb8c7fc0c75c21d91.png)
 
 
 **计算流程解析**：
@@ -219,7 +219,7 @@ $$
 神经突触需要积累足够浓度的神经递质才会触发动作电位，sigmoid函数在这里承担着类似阈值的判断功能。当组合信号输入sigmoid函数时，低于阈值的信号会被压缩趋近于0（类似神经元的静息状态），而高于阈值的信号则被放大趋近于1（神经冲动传导）。
 
 我们可以在上述流程中再增加一步以便更好的理解这一过程：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/2ffba6ed39f74e019eb50dea9fb0a467.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/2ffba6ed39f74e019eb50dea9fb0a467.png)
 
 
 - 在流程图中新增的激活环节揭示了一个关键现象——首层sigmoid函数可能将部分信号归零，只有有效信号能传递到下一层继续计算。这种层层筛选的结构恰似生物神经网络的工作模式，"神经网络"（Neural Network）的命名正源于此。
@@ -241,7 +241,7 @@ $$
 - **输出层**：10节点（输出概率分布）
 
 具体结构如下图所示：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/ab3150a8e7bb448ba31ecb1b652b8b49.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/ab3150a8e7bb448ba31ecb1b652b8b49.png)
 
 
 ### ReLU的数学优势
@@ -346,7 +346,7 @@ $$
 3. **动量梯度下降**：通过引入历史梯度信息，有效抑制震荡加速收敛（进阶技巧，暂不展开）
 
 让我们通过图片直观理解梯度下降的数学本质。假设参数空间中的损失函数如下图所示：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/925e7a260e7f4916b6da747d4cadbd7e.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/925e7a260e7f4916b6da747d4cadbd7e.png)
 
 
 初始参数通常随机设置（如图中起点），此时梯度下降算法将执行以下关键操作：
@@ -355,7 +355,7 @@ $$
 3. **迭代终止**：当梯度模长小于阈值或达到最大迭代次数时停止
 
 梯度方向的物理意义在图中尤为直观：
-> ![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/df4db9b06da7434281306d533d0cfee4.png#pic_center)
+> ![在这里插入图片描述](../assets/images/mlp-mnist/df4db9b06da7434281306d533d0cfee4.png)
 
 - **负斜率区域**（左图）：向x轴正方向移动可降低损失值
 - **正斜率区域**（右图）：向x轴负方向移动才有效
@@ -535,7 +535,7 @@ plt.show()
 
 
     
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/24eca9e6098240f28db8e2a8c8303d78.png#pic_center)
+![在这里插入图片描述](../assets/images/mlp-mnist/24eca9e6098240f28db8e2a8c8303d78.png)
 
     
 

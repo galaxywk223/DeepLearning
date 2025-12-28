@@ -23,7 +23,7 @@ env/
 Thumbs.db
 
 # Training outputs and logs
-mnist-cnn-experiments/outputs/
+projects/mnist-cnn-experiments/outputs/
 *.pth
 *.pt
 *.tfevents.*
